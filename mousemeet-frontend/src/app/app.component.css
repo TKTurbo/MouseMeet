@@ -1,0 +1,10 @@
+/* The field mice are visible in */
+#mouseField {
+  border: 1px solid black;
+
+  /* Center it horizontally and vertically */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
