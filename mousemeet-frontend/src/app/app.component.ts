@@ -1,4 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent {
   myCanvas: ElementRef<HTMLCanvasElement>;
   // @ts-ignore
   private ctx: CanvasRenderingContext2D;
+  socket: SocketIOClient.Socket;
 
   // Delay for sending requests
   delay = 100
@@ -28,6 +30,7 @@ export class AppComponent {
   hasMoved = false;
   // TODO: with socket
   hasUpdates = true;
+  username = 'anonymous'
 
   ngOnInit() {
     // @ts-ignore
@@ -38,7 +41,6 @@ export class AppComponent {
       // Does it need to be updated?
       if (this.inField && this.hasMoved && this.hasUpdates) {
 
-        console.log(1);
         this.clearCanvas()
         this.renderElement(this.pos.x, this.pos.y)
 
@@ -46,7 +48,6 @@ export class AppComponent {
       }
     }, this.delay);
 
-    console.log(this.myCanvas)
   }
 
   enterField() {
@@ -62,17 +63,6 @@ export class AppComponent {
   moveCursor(event: MouseEvent) {
     this.pos = {x: event.offsetX, y: event.offsetY}
     this.hasMoved = true;
-    // console.log(this.pos);
-
-    // if (this.isDelayed) {
-    //   setTimeout(() => {
-    //     this.isDelayed = false
-    //   }, this.delay);
-    // } else { // if not, move and change isDelayed
-    //   console.log('Moved');
-    //   // console.log(event);
-    //   this.isDelayed = true
-    // }
   }
 
   initializeCanvas() {
@@ -84,9 +74,16 @@ export class AppComponent {
     this.ctx.clearRect(0, 0, this.myCanvas.nativeElement.width, this.myCanvas.nativeElement.height);
   }
 
+  /**
+   * Renders a player
+   * @param x
+   * @param y
+   */
   renderElement(x: number, y: number) {
     this.ctx.beginPath();
     this.ctx.rect(x, y, 10, 10);
     this.ctx.stroke();
+    this.ctx.font = "10px Arial";
+    this.ctx.fillText(this.username, x, y);
   }
 }

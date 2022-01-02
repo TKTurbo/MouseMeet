@@ -1,0 +1,1 @@
+Simple project that displays each persons mouse that enters the square using websockets.

@@ -1,3 +1,9 @@
-<canvas width="700" height="400" #myCanvas id="mouseField" (mouseenter)="enterField()" (mouseleave)="exitField()" (mousemove)="moveCursor($event)"></canvas>
-
-<button (click)="moveCursor($event)">testbutton</button>
+<main id="container">
+  <canvas width="700" height="400" #myCanvas id="mouseField" (mouseenter)="enterField()" (mouseleave)="exitField()" (mousemove)="moveCursor($event)"></canvas>
+  <form id="formField">
+    <label>Your username<br>
+      <input name="username" placeholder="username" [(ngModel)]="username">
+    </label>
+  </form>
+</main>
+<!--<button (click)="moveCursor($event)">testbutton</button>-->

@@ -8,3 +8,17 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* The field for inputs like name*/
+#formField {
+  /* Put it above the mousefield */
+  margin-top: -250px;
+}
+
+/* Container to contain the formfield and mousefield */
+#container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
