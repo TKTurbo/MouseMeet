@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import {FormsModule} from "@angular/forms";
+import {SocketService} from "./socket-service.service";
 
 @NgModule({
   declarations: [
@@ -12,7 +13,7 @@ import {FormsModule} from "@angular/forms";
         BrowserModule,
         FormsModule
     ],
-  providers: [],
+  providers: [SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

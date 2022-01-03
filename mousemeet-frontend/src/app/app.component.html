@@ -1,9 +1,15 @@
 <main id="container">
-  <canvas width="700" height="400" #myCanvas id="mouseField" (mouseenter)="enterField()" (mouseleave)="exitField()" (mousemove)="moveCursor($event)"></canvas>
   <form id="formField">
+    <h1 id="headerText">MouseMeet
+      <!-- TODO: better icon and maybe don't use this for the canvas -->
+      <img #defaultCursor width="13px" height="21px" src="https://www.pinclipart.com/picdir/big/42-429460_mouse-pointer-01-windows-mouse-cursor-transparent-clipart.png" alt="^">
+    </h1>
     <label>Your username<br>
       <input name="username" placeholder="username" [(ngModel)]="username">
     </label>
   </form>
+
+  <canvas width="700" height="400" #myCanvas id="mouseField" (mouseenter)="enterField()" (mouseleave)="exitField()"
+          (mousemove)="moveCursor($event)"></canvas>
 </main>
 <!--<button (click)="moveCursor($event)">testbutton</button>-->

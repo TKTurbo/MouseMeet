@@ -9,10 +9,10 @@
   transform: translate(-50%, -50%);
 }
 
-/* The field for inputs like name*/
+/* The field for inputs like name, also the title */
 #formField {
   /* Put it above the mousefield */
-  margin-top: -250px;
+  margin-top: -340px;
 }
 
 /* Container to contain the formfield and mousefield */
@@ -21,4 +21,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+#headerText {
+  /* Put it above the formfield */
+  /*margin-top: -330px;*/
+  /*z-index: -1;*/
+  /*background-color: transparent;*/
 }
