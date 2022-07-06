@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+    // TODO: on disconnect
 
     // let userId;
     // socket.on('new player', function(id, name) {
@@ -24,15 +25,24 @@ io.on('connection', (socket) => {
     //     // ...
     // });
 
-    socket.on('sendMessage', function (data) {
-        console.log(data)
-        socket.broadcast.emit('newMessage', 'Akkoord')
+    socket.on('message', (message) => {
+        console.log(message);
+        io.emit('message', `${socket.id.substr(0, 2)} said ${message}`);
     });
 
-    // TODO: move in and out and check socket id
-
     socket.on('movement', function (data) {
-        console.log(data);
+        console.log(socket.id + ' moved to ' + data.x + ' ' + data.y);
+        io.emit('movement', JSON.stringify({socketId: socket.id, x: data.x, y: data.y}));
+    });
+
+    socket.on('enter', function (username) {
+        console.log(socket.id + ' entered with name ' + username);
+        io.emit('enter', JSON.stringify({socketId: socket.id, username: username}));
+    });
+
+    socket.on('leave', function () {
+        console.log(socket.id + ' left');
+        io.emit('leave', socket.id);
     });
 });
 

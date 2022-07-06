@@ -1,46 +1,62 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {io, Socket} from 'socket.io-client';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SocketService {
-  private socket: Socket;
+  socket = io('http://localhost:3000');
+  public message$: BehaviorSubject<string> = new BehaviorSubject('');
+  public entrance$: BehaviorSubject<object> = new BehaviorSubject({});
+  public leave$: BehaviorSubject<string> = new BehaviorSubject('');
+  public movement$: BehaviorSubject<string> = new BehaviorSubject('');
 
-  constructor() {
-    this.socket = io('http://localhost:3000');
+  public sendMessage(message: string) {
+    this.socket.emit('message', message);
   }
 
-  // Emit basic message
-  sendMessage(msg: string) {
-    this.socket.emit('sendMessage', {message: msg});
-  }
-
-  // Handle basic message
-  onNewMessage() {
-    return new Observable(observer => {
-      this.socket.on('newMessage', msg => {
-        observer.next(msg);
-      });
+  public getMessage = () => {
+    this.socket.on('message', (message) =>{
+      this.message$.next(message);
     });
+
+    return this.message$.asObservable();
+  };
+
+  sendEnter(username: string) {
+    this.socket.emit('enter', username);
   }
 
-  sendEnter() {
+  public getEnter = () => {
+    this.socket.on('enter', (entrance) =>{
+      this.entrance$.next(entrance);
+    });
 
-  }
+    return this.entrance$.asObservable();
+  };
 
   sendLeave() {
-
+    this.socket.emit('leave');
   }
 
-  sendMovement() {
+  public getLeave = () => {
+    this.socket.on('leave', (leave) =>{
+      this.leave$.next(leave);
+    });
 
+    return this.leave$.asObservable();
+  };
+
+  sendMovement(pos: object) {
+    this.socket.emit('movement', pos);
   }
 
-  /**
-   * Whenever someone enters, leaves or moves, the mousefield needs to be updated.
-   * The mousefield should be an array with objects that contain a socket id, a username and a position
-   */
-  onMouseFieldUpdate() {
+  public getMovement = () => {
+    this.socket.on('leave', (movement) =>{
+      this.movement$.next(movement);
+    });
 
-  }
+    return this.movement$.asObservable();
+  };
 }

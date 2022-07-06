@@ -32,9 +32,8 @@ export class AppComponent {
   };
 
   // TODO: current active players
-  currentMice = [
-
-    ]
+  // currentMice = Array<{socketId: string, username: string, x: number, y: number}>;
+  currentMice: Array<{socketId: string, username: string, x: number, y: number}> = [];
 
   // True after mousemove, set false every interval
   hasMoved = false;
@@ -42,13 +41,27 @@ export class AppComponent {
   hasUpdates = true;
   username = 'anonymous'
 
-  constructor(private socketService: SocketService,) {}
+  constructor(private socketService: SocketService) {}
 
   ngOnInit() {
-    // Socket
-      this.socketService.onNewMessage().subscribe(msg => {
-        console.log('got a msg: ' + msg);
-      });
+    // Get simple messages
+    this.socketService.getMessage().subscribe((message: string) => {
+      // console.log(message);
+    });
+
+    // Get enters
+    this.socketService.getEnter().subscribe((entrance: object) => {
+      console.log(entrance);
+      console.log(typeof entrance);
+      let entranceObj = entrance;
+      this.currentMice.push({socketId: entranceObj.socketId, username: entranceObj.username, x: 0, y: 0})
+    });
+
+    // Get leaves
+    this.socketService.getLeave().subscribe((socketId: string) => {
+      // console.log(socketId);
+    });
+
 
       // TODO: On mousefield change, update the canvas
 
@@ -60,9 +73,9 @@ export class AppComponent {
       // Does it need to be updated?
       if (this.inField && this.hasMoved) {
 
-        this.clearCanvas()
-        this.renderElement(this.pos.x, this.pos.y)
-        this.pushMessage()
+        this.clearCanvas();
+        // this.renderElement(this.pos.x, this.pos.y, this.username);
+        this.socketService.sendMovement(this.pos);
 
         this.hasMoved = false;
       }
@@ -72,12 +85,12 @@ export class AppComponent {
 
   enterField() {
     this.inField = true;
-    this.socketService.sendMessage(this.username + ' entered');
+    this.socketService.sendEnter(this.username);
   }
 
   exitField() {
     this.inField = false;
-    this.socketService.sendMessage(this.username + ' exited');
+    this.socketService.sendLeave();
   }
 
   moveCursor(event: MouseEvent) {
@@ -98,32 +111,13 @@ export class AppComponent {
    * Renders an element: a player with their name and cursor
    * @param x
    * @param y
+   * @param username
    */
-  renderElement(x: number, y: number) {
+  renderElement(x: number, y: number, username: string) {
     this.ctx.beginPath();
-    // this.ctx.rect(x, y, 10, 10);
     this.ctx.drawImage(this.defaultCursor.nativeElement, x, y, 10, 16);
     this.ctx.stroke();
     this.ctx.font = "10px Arial";
-    this.ctx.fillText(this.username, x, y);
-  }
-
-  /**
-   * Sends a basic message using the SocketService
-   */
-  pushMessage(){
-    this.socketService.sendMessage('moiiii');
-  }
-
-  pushPosition() {
-
-  }
-
-  pushEntrance() {
-
-  }
-
-  pushExit() {
-
+    this.ctx.fillText(username, x, y);
   }
 }
